@@ -1,3 +1,5 @@
-imagen: rabbitmq:management-alpine
-5672 -> recibir información
-15672 --> interface gráfica --> localhost:15672 (admin/admin)
+# Rabbitmq
+
+```
+docker run -d --name server-rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management-alpine
+```

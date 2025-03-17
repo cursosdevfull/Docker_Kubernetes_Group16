@@ -1,3 +1,5 @@
-imagen: sonarqube:community
-9000 -> interface gráfica
-9092 -> recibe el informe
+# Sonarqube
+
+```
+docker run -d --name server-sonarqube -p 9000:9000 -p 9092:9092 sonarqube:community
+```
