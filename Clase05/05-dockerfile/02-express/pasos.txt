@@ -1,0 +1,4 @@
+1. Obtener una imagen del sistema operativo que incluya nodejs
+2. Copiar los archivos necesarios para la aplicación
+3. Instalar las dependencias de la aplicación
+4. Ejecutar la aplicación
