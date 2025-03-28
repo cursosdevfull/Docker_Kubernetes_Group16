@@ -1,0 +1,25 @@
+services:
+  server-mysql:
+    image: mysql:8
+    container_name: server-mysql
+    env_file: ./.env
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - net-course2
+    volumes:
+      - vol-mysql-course:/var/lib/mysql
+
+volumes:
+  vol-mysql-course:
+    name: vol-mysql-course
+
+networks:
+  net-course2:
+    name: net-course2
+    driver: bridge
