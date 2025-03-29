@@ -2,9 +2,7 @@ services:
   server-mysql:
     image: mysql:8
     container_name: server-mysql
-    env_file: ./.env
-    ports:
-      - "3306:3306"
+    env_file: ./app-backend/.env
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -14,6 +12,46 @@ services:
       - net-course2
     volumes:
       - vol-mysql-course:/var/lib/mysql
+
+  app-backend:
+    build:
+      context: ./app-backend
+      dockerfile: Dockerfile
+    container_name: app-backend
+    env_file: ./app-backend/.env
+    ports:
+      - "8080:3000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 10s
+      timeout: 5s
+      retries: 3      
+    depends_on:
+      server-mysql:
+        condition: service_healthy
+    networks:
+      - net-course2
+
+  app-frontend:
+    build:
+      context: ./app-frontend
+      dockerfile: Dockerfile
+    container_name: app-frontend
+    restart: on-failure
+    ports:
+      - "8070:80"
+    environment:
+      - API_ENDPOINT=http://localhost:8080
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3      
+    depends_on:
+      app-backend:
+        condition: service_healthy
+    networks:
+      - net-course2      
 
 volumes:
   vol-mysql-course:

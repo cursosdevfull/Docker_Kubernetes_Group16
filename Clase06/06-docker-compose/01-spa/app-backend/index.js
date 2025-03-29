@@ -2,21 +2,23 @@ const express = require("express");
 const app = express();
 const mysql = require("mysql2");
 const cors = require("cors");
+const dotenv = require('dotenv')
+dotenv.config()
 
 const connection = mysql.createConnection({
-    host: process.env["db_host"] || "localhost",
-    port: process.env["db_port"] || "4500",
-    user: process.env["db_user"] || "user",
-    password: process.env["db_password"] || "12345",
-    database: process.env["db_database"] || "db",
+    host: process.env["MYSQL_HOST"] || "localhost",
+    port: process.env["MYSQL_PORT"] || "4500",
+    user: process.env["MYSQL_USER"] || "user",
+    password: process.env["MYSQL_PASSWORD"] || "12345",
+    database: process.env["MYSQL_DATABASE"] || "db",
 });
 
 console.log("connection", {
-    host: process.env["db_host"] || "localhost",
-    port: process.env["db_port"] || "3306",
-    user: process.env["db_user"] || "user",
-    password: process.env["db_password"] || "12345",
-    database: process.env["db_database"] || "db",
+    host: process.env["MYSQL_HOST"] || "localhost",
+    port: process.env["MYSQL_PORT"] || "4500",
+    user: process.env["MYSQL_USER"] || "user",
+    password: process.env["MYSQL_PASSWORD"] || "12345",
+    database: process.env["MYSQL_DATABASE"] || "db",
 })
 
 connection.connect();
@@ -38,13 +40,13 @@ app.get("/list", (req, res) => {
 
 app.post("/add", (req, res) => {
     const { name, lastname } = req.body;
-    console.log("body", req.body);
+
     connection.query(
         "insert into user (name, lastname) values (?,?)",
         [name, lastname],
         (errors, results) => {
             if (errors) throw errors;
-            res.send("user inserted");
+            res.json({ status: "user inserted" });
         }
     );
 });
@@ -61,6 +63,6 @@ app.get("/create-table", (req, res) => {
     );
 });
 
-const port = process.env["port"] ? +process.env["port"] : 3000;
+const port = process.env["PORT"] ? +process.env["PORT"] : 3000;
 
 app.listen(port, () => console.log(`Server is running on port ${port}`));

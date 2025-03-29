@@ -1,0 +1,11 @@
+### Add a new user
+post http://localhost:3000/add
+Content-Type: application/json
+
+{
+  "name": "Carmen",
+  "lastname": "Lozada"
+}
+
+### List all users
+get http://localhost:3000/list
