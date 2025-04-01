@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-cluster-ip
+spec:
+  type: ClusterIP
+  selector:
+    env: dev
+    app: frontend
+  ports:
+    - port: 3000
+      targetPort: 80
+      protocol: TCP
+      name: port-web
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rs-nginx
+  labels:
+    env: dev
+    app: frontend
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      env: dev
+      app: frontend
+  template:
+    metadata:
+      labels:
+        env: dev
+        app: frontend
+    spec:
+      containers:
+        - name: container01
+          image: python:3.6-alpine
+          command: [
+            "sh",
+            "-c",
+            "echo 'pagina cerrada' > index.html && python -m http.server 8082"
+          ]
